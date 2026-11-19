@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mindful Face Gesture Controller - Biometric Grid Theme</title>
+  <style>
+    :root {
+      --bg-wood: #14100e;
+      --card-bg: rgba(30, 24, 21, 0.85);
+      --gold: #f59e0b;
+      --gold-light: #fbbf24;
+      --gold-glow: rgba(245, 158, 11, 0.4);
+      --text-light: #fef3c7;
+      --text-muted: #d1d5db;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at center, #261e1a 0%, var(--bg-wood) 100%);
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Header styling with Mahoraga symbols */
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 5px;
+    }
+
+    .mahoraga-symbol {
+      font-size: 2rem;
+      color: var(--gold);
+      text-shadow: 0 0 15px var(--gold-glow);
+      animation: rotateWheel 15s linear infinite;
+    }
+
+    @keyframes rotateWheel {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    h1 {
+      color: var(--gold-light);
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px var(--gold-glow);
+      font-family: 'Georgia', serif;
+      text-align: center;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      margin-top: 0;
+      margin-bottom: 25px;
+      font-style: italic;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    /* Main layout container framing the center stage with balanced side sidebars */
+    .app-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      width: 100%;
+      max-width: 1250px;
+    }
+
+    /* Sidebars (Left & Right Minimalist Buddha Graphics) */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      width: 160px;
+    }
+
+    .minimal-buddha {
+      width: 90px;
+      height: 150px;
+      position: relative;
+      filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
+      margin-bottom: 15px;
+    }
+
+    .m-head {
+      width: 36px;
+      height: 40px;
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      border-radius: 50% 50% 45% 45%;
+      margin: 0 auto 5px auto;
+      position: relative;
+    }
+    .m-head::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      width: 12px;
+      height: 12px;
+      background: #fbbf24;
+      border-radius: 50%;
+    }
+    .m-body {
+      width: 70px;
+      height: 85px;
+      background: linear-gradient(180deg, #d97706, #92400e);
+      border-radius: 45px 45px 12px 12px;
+      margin: 0 auto;
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.25);
+    }
+    .m-base {
+      width: 88px;
+      height: 14px;
+      background: #78350f;
+      border-radius: 10px;
+      margin: 5px auto 0 auto;
+    }
+
+    .sidebar-label {
+      color: var(--gold-light);
+      font-family: 'Georgia', serif;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      margin-top: 10px;
+    }
+
+    .center-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .media-container {
+      position: relative;
+      width: min(85vw, 600px);
+      aspect-ratio: 4 / 3;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 20px var(--gold-glow);
+      background: #1a1412;
+      border: 3px solid var(--gold);
+    }
+
+    video, canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1); /* Mirror effect */
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    button {
+      padding: 12px 30px;
+      margin: 0;
+      border: 1px solid var(--gold);
+      border-radius: 30px;
+      background: linear-gradient(135deg, #b45309, #d97706);
+      color: #fffbeb;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(180, 83, 9, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+      box-shadow: 0 6px 20px var(--gold-glow);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.audio-toggle {
+      padding: 10px 20px;
+      font-size: 14px;
+      background: rgba(30, 24, 21, 0.9);
+      border: 1px solid rgba(245, 158, 11, 0.6);
+      color: var(--gold-light);
+    }
+
+    button.audio-toggle:hover {
+      background: rgba(180, 83, 9, 0.35);
+    }
+
+    .panel {
+      width: min(85vw, 550px);
+      padding: 18px;
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border: 2px solid rgba(245, 158, 11, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-size: 0.9rem;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 500;
+    }
+
+    #gesture {
+      font-size: 1.6rem;
+      color: #34d399;
+      font-weight: 600;
+      margin: 10px 0;
+      text-shadow: 0 0 12px rgba(52, 211, 153, 0.3);
+      font-family: 'Georgia', serif;
+    }
+
+    #action {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    @media (max-width: 1000px) {
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <div class="mahoraga-symbol">☸</div>
+    <h1>Mindful Presence</h1>
+    <div class="mahoraga-symbol">☸</div>
+  </div>
+  <p class="subtitle">"Peace comes from within. Do not seek it without." — Buddha</p>
+
+  <div class="app-layout">
+    <!-- Left Minimalist Buddha Graphic Sidebar -->
+    <div class="sidebar">
+      <div class="minimal-buddha">
+        <div class="m-head"></div>
+        <div class="m-body"></div>
+        <div class="m-base"></div>
+      </div>
+      <div class="sidebar-label">SERENITY</div>
+    </div>
+
+    <!-- Center Interactive Stage -->
+    <div class="center-stage">
+      <div class="media-container">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="output_canvas"></canvas>
+      </div>
+
+      <div class="controls-row">
+        <button id="start">Begin Meditation / Camera</button>
+        <button id="audioToggle" class="audio-toggle">🔊 Soundscape: Active</button>
+      </div>
+
+      <div class="panel">
+        <h2>State of Mind</h2>
+        <p id="gesture">Waiting to begin...</p>
+        <p id="action">Click begin to awaken the mirror</p>
+      </div>
+    </div>
+
+    <!-- Right Minimalist Buddha Graphic Sidebar -->
+    <div class="sidebar">
+      <div class="minimal-buddha">
+        <div class="m-head"></div>
+        <div class="m-body"></div>
+        <div class="m-base"></div>
+      </div>
+      <div class="sidebar-label">WISDOM</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      FaceLandmarker,
+      FilesetResolver
+    } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+
+    /* =====================================================================
+       WEB AUDIO ENGINE: Continuous Ambient Drone + UI & Face Detection SFX
+       ===================================================================== */
+    class MindfulAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.masterGain = null;
+        this.droneGain = null;
+        this.isStarted = false;
+        this.isMuted = false;
+        this.melodyTimer = null;
+        this.droneNodes = [];
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.setValueAtTime(0.75, this.ctx.currentTime);
+          this.masterGain.connect(this.ctx.destination);
+        }
+
+        if (this.ctx.state === "suspended") {
+          this.ctx.resume();
+        }
+
+        if (!this.isStarted) {
+          this.startSoothingMusic();
+          this.isStarted = true;
+        }
+      }
+
+      startSoothingMusic() {
+        const now = this.ctx.currentTime;
+
+        // Warm low-pass filter to keep the drone velvet-soft
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(420, now);
+        filter.Q.setValueAtTime(0.7, now);
+
+        this.droneGain = this.ctx.createGain();
+        this.droneGain.gain.setValueAtTime(0.0001, now);
+        this.droneGain.gain.exponentialRampToValueAtTime(0.16, now + 4);
+
+        filter.connect(this.droneGain);
+        this.droneGain.connect(this.masterGain);
+
+        // 432Hz-inspired warm Cmaj9 / Fmaj7 harmonic pad frequencies (Hz)
+        const padFreqs = [130.81, 196.00, 246.94, 293.66, 329.63];
+
+        padFreqs.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const oscGain = this.ctx.createGain();
+          const lfo = this.ctx.createOscillator();
+          const lfoGain = this.ctx.createGain();
+
+          osc.type = idx % 2 === 0 ? "sine" : "triangle";
+          osc.frequency.setValueAtTime(freq, now);
+          osc.detune.setValueAtTime((idx - 2) * 3.5, now); // Gentle chorus warmth
+
+          // Slow breathing modulation on each harmonic voice
+          lfo.type = "sine";
+          lfo.frequency.setValueAtTime(0.07 + idx * 0.023, now);
+          lfoGain.gain.setValueAtTime(0.035, now);
+
+          oscGain.gain.setValueAtTime(0.14 / padFreqs.length, now);
+
+          lfo.connect(lfoGain);
+          lfoGain.connect(oscGain.gain);
+
+          osc.connect(oscGain);
+          oscGain.connect(filter);
+
+          osc.start(now);
+          lfo.start(now);
+          this.droneNodes.push(osc, lfo);
+        });
+
+        // Periodic soft singing-bowl overtones floating over the continuous pad
+        const scaleNotes = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+        const triggerAmbientChime = () => {
+          if (this.ctx && this.ctx.state === "running" && !this.isMuted) {
+            const note = scaleNotes[Math.floor(Math.random() * scaleNotes.length)];
+            this.playSoftBell(note, 0.035, 5.5);
+          }
+          const nextDelay = 4500 + Math.random() * 5000;
+          this.melodyTimer = setTimeout(triggerAmbientChime, nextDelay);
+        };
+        this.melodyTimer = setTimeout(triggerAmbientChime, 3000);
+      }
+
+      playSoftBell(freq, peakVolume = 0.06, duration = 4.0) {
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+
+        const osc = this.ctx.createOscillator();
+        const overtone = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now);
+
+        overtone.type = "sine";
+        overtone.frequency.setValueAtTime(freq * 2.0, now);
+
+        const overtoneGain = this.ctx.createGain();
+        overtoneGain.gain.setValueAtTime(0.22, now);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(peakVolume, now + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+        osc.connect(gain);
+        overtone.connect(overtoneGain);
+        overtoneGain.connect(gain);
+        gain.connect(this.masterGain);
+
+        osc.start(now);
+        overtone.start(now);
+        osc.stop(now + duration + 0.05);
+        overtone.stop(now + duration + 0.05);
+      }
+
+      // Crisp tactile chime when pressing any UI button
+      playButtonClick() {
+        this.init();
+        const now = this.ctx.currentTime;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(587.33, now);       // D5
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.14); // A5
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(0.14, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+
+        osc.start(now);
+        osc.stop(now + 0.38);
+      }
+
+      // Ethereal two-tone harmonic chime when a face enters the biometric scanner
+      playFaceDetected() {
+        this.init();
+        const now = this.ctx.currentTime;
+        const chord = [523.25, 659.25, 783.99]; // C5 - E5 - G5 major triad
+
+        chord.forEach((freq, idx) => {
+          const start = now + idx * 0.07;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, start);
+
+          gain.gain.setValueAtTime(0.0001, start);
+          gain.gain.linearRampToValueAtTime(0.09, start + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + 1.4);
+
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+
+          osc.start(start);
+          osc.stop(start + 1.45);
+        });
+      }
+
+      // Subtle crystalline pulse when an expression state changes
+      playExpressionChime() {
+        if (!this.ctx || this.isMuted) return;
+        this.playSoftBell(659.25, 0.045, 1.8);
+      }
+
+      toggleMute() {
+        this.init();
+        this.isMuted = !this.isMuted;
+        const now = this.ctx.currentTime;
+        this.masterGain.gain.cancelScheduledValues(now);
+        this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.75, now, 0.15);
+        return this.isMuted;
+      }
+    }
+
+    const audioEngine = new MindfulAudioEngine();
+
+    // Auto-start soothing background music on the very first user gesture anywhere on the page
+    // (Browsers require a user interaction before unblocking Web Audio playback)
+    const unlockAudioOnFirstInteraction = () => {
+      audioEngine.init();
+      window.removeEventListener("pointerdown", unlockAudioOnFirstInteraction);
+      window.removeEventListener("keydown", unlockAudioOnFirstInteraction);
+    };
+    window.addEventListener("pointerdown", unlockAudioOnFirstInteraction);
+    window.addEventListener("keydown", unlockAudioOnFirstInteraction);
+
+    // Attach button sound effects to all buttons
+    document.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        audioEngine.playButtonClick();
+      });
+    });
+
+    const audioToggleBtn = document.getElementById("audioToggle");
+    audioToggleBtn.addEventListener("click", () => {
+      const muted = audioEngine.toggleMute();
+      audioToggleBtn.textContent = muted ? "🔇 Soundscape: Muted" : "🔊 Soundscape: Active";
+    });
+
+    /* =====================================================================
+       MEDIAPIPE FACE LANDMARKER & BIOMETRIC RENDERING
+       ===================================================================== */
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("output_canvas");
+    const canvasCtx = canvas.getContext("2d");
+    const gestureElem = document.getElementById("gesture");
+    const actionElem = document.getElementById("action");
+
+    let faceLandmarker;
+    let lastGesture = "";
+    let lastActionTime = 0;
+    let runningMode = "VIDEO";
+    let smoothedScores = {};
+    let isFaceCurrentlyDetected = false;
+    let lastFaceDetectSoundTime = 0;
+
+    // A short moving average makes expressions less jumpy than using one video frame.
+    function smoothBlendshapes(scores) {
+      const smoothing = 0.28;
+      Object.keys(scores).forEach(name => {
+        const previous = smoothedScores[name] ?? scores[name];
+        smoothedScores[name] = previous + (scores[name] - previous) * smoothing;
+      });
+      return smoothedScores;
+    }
+
+    function distance(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    async function setup() {
+      gestureElem.textContent = "Connecting to inner vision...";
+      
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+      );
+
+      faceLandmarker = await FaceLandmarker.createFromOptions(
+        vision,
+        {
+          baseOptions: {
+            modelAssetPath:
+              "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+            delegate: "GPU"
+          },
+          runningMode: runningMode,
+          numFaces: 1,
+          outputFaceBlendshapes: true
+        }
+      );
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 1280, height: 720 }
+      });
+
+      video.srcObject = stream;
+
+      video.onloadeddata = () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        gestureElem.textContent = "Camera Ready ✨";
+        detectLoop();
+      };
+    }
+
+    function performAction(name, message) {
+      const now = Date.now();
+      if (name === lastGesture && (now - lastActionTime) < 1200) return;
+
+      if (name !== lastGesture) {
+        audioEngine.playExpressionChime();
+      }
+
+      lastGesture = name;
+      lastActionTime = now;
+
+      gestureElem.textContent = name;
+      actionElem.textContent = message;
+    }
+
+    // Custom Biometric Face Recognition Grid Overlay Renderer
+    function drawBiometricGrid(ctx, landmarks) {
+      if (!landmarks || landmarks.length === 0) return;
+
+      ctx.save();
+      ctx.strokeStyle = "rgba(16, 185, 129, 0.85)"; // Bright biometric green
+      ctx.fillStyle = "rgba(16, 185, 129, 0.12)";
+      ctx.lineWidth = 1;
+      ctx.shadowColor = "#10b981";
+      ctx.shadowBlur = 6;
+
+      // Calculate bounding box of the face for the main scan box
+      let minX = canvas.width, maxX = 0, minY = canvas.height, maxY = 0;
+      landmarks.forEach(pt => {
+        let px = pt.x * canvas.width;
+        let py = pt.y * canvas.height;
+        if (px < minX) minX = px;
+        if (px > maxX) maxX = px;
+        if (py < minY) minY = py;
+        if (py > maxY) maxY = py;
+      });
+
+      // Add padding for the main bounding box frame
+      minX -= 20; maxX += 20; minY -= 30; maxY += 20;
+
+      // 1. Draw Main Bounding Box with Corner Accents
+      ctx.strokeRect(minX, minY, maxX - minX, maxY - minY);
+
+      // 2. Draw Horizontal Biometric Scan Lines across the face
+      ctx.strokeStyle = "rgba(16, 185, 129, 0.25)";
+      for (let y = minY + 20; y < maxY; y += 18) {
+        ctx.beginPath();
+        ctx.moveTo(minX, y);
+        ctx.lineTo(maxX, y);
+        ctx.stroke();
+      }
+
+      // 3. Draw Crosshair Targeting Boxes around Eyes and Mouth
+      const leftEye = landmarks[33];    // Outer corner of left eye
+      const rightEye = landmarks[263];  // Outer corner of right eye
+      const mouthCenter = landmarks[13]; // Upper lip center
+
+      [leftEye, rightEye].forEach(eye => {
+        if (eye) {
+          let ex = eye.x * canvas.width;
+          let ey = eye.y * canvas.height;
+          ctx.strokeStyle = "#34d399";
+          ctx.strokeRect(ex - 18, ey - 18, 36, 36);
+          // Crosshairs
+          ctx.beginPath();
+          ctx.moveTo(ex - 25, ey); ctx.lineTo(ex - 18, ey);
+          ctx.moveTo(ex + 18, ey); ctx.lineTo(ex + 25, ey);
+          ctx.moveTo(ex, ey - 25); ctx.lineTo(ex, ey - 18);
+          ctx.moveTo(ex, ey + 18); ctx.lineTo(ex, ey + 25);
+          ctx.stroke();
+        }
+      });
+
+      if (mouthCenter) {
+        let mx = mouthCenter.x * canvas.width;
+        let my = mouthCenter.y * canvas.height;
+        ctx.strokeStyle = "#f43f5e"; // Red accent for mouth scan
+        ctx.strokeRect(mx - 30, my - 15, 60, 30);
+      }
+
+      // 4. Draw Connectors / Landmark Dots for precise facial mapping
+      ctx.fillStyle = "#10b981";
+      const keyNodes = [10, 152, 234, 454, 33, 263, 61, 291, 1, 6, 168];
+      keyNodes.forEach(idx => {
+        let pt = landmarks[idx];
+        if (pt) {
+          let px = pt.x * canvas.width;
+          let py = pt.y * canvas.height;
+          ctx.beginPath();
+          ctx.arc(px, py, 2.5, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+      });
+
+      ctx.restore();
+    }
+
+    function detectLoop() {
+      if (video.readyState >= 2) {
+        const results = faceLandmarker.detectForVideo(video, performance.now());
+
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (results.faceLandmarks && results.faceLandmarks.length > 0) {
+          // Trigger face detection sound effect when a face newly enters the frame
+          if (!isFaceCurrentlyDetected) {
+            isFaceCurrentlyDetected = true;
+            const now = Date.now();
+            if (now - lastFaceDetectSoundTime > 2000) {
+              audioEngine.playFaceDetected();
+              lastFaceDetectSoundTime = now;
+            }
+          }
+
+          const landmarks = results.faceLandmarks[0];
+
+          // Render the high-tech green biometric face-scanning grid overlay
+          drawBiometricGrid(canvasCtx, landmarks);
+
+          if (results.faceBlendshapes && results.faceBlendshapes.length > 0) {
+            const categories = results.faceBlendshapes[0].categories;
+            const scores = {};
+            categories.forEach(item => {
+              scores[item.categoryName] = item.score;
+            });
+
+            const smooth = smoothBlendshapes(scores);
+            const smile = Math.max(smooth.mouthSmileLeft || 0, smooth.mouthSmileRight || 0);
+            const mouthFrown = Math.max(smooth.mouthFrownLeft || 0, smooth.mouthFrownRight || 0);
+            const browDown = Math.max(smooth.browDownLeft || 0, smooth.browDownRight || 0);
+            const browInnerUp = smooth.browInnerUp || 0;
+            const jawOpen = smooth.jawOpen || 0;
+            const mouthStretch = Math.max(smooth.mouthStretchLeft || 0, smooth.mouthStretchRight || 0);
+
+            // Scale the lip opening by face width, so the yawn check works at different distances.
+            const faceWidth = Math.max(distance(landmarks[234], landmarks[454]), 0.001);
+            const lipGap = distance(landmarks[13], landmarks[14]) / faceWidth;
+            const mouthCornersDrop =
+              ((landmarks[61].y + landmarks[291].y) / 2 - landmarks[13].y) /
+              Math.max(distance(landmarks[10], landmarks[152]), 0.001);
+
+            // Sorrow needs both a downward mouth and raised inner brows. This avoids
+            // confusing an ordinary frown with sadness.
+            const sorrow = mouthFrown > 0.14 && browInnerUp > 0.12 && mouthCornersDrop > 0.025;
+            const frown = mouthFrown > 0.18 || (browDown > 0.22 && mouthFrown > 0.10);
+            // A yawn is a tall, open mouth, not merely a quick jaw movement while talking.
+            const yawn = jawOpen > 0.42 && lipGap > 0.105 && (mouthStretch > 0.08 || jawOpen > 0.58);
+
+            if (smile > 0.55) {
+              performAction("😊 SERENE SMILE", "Joy arises from a tranquil mind.");
+            } else if (yawn) {
+              performAction("🥱 RESTFUL YAWN", "Pause, breathe deeply, and gently reset your focus.");
+            } else if (sorrow) {
+              performAction("😢 REFLECTIVE SORROW (FROWN)", "Acknowledging pain with compassionate awareness.");
+            } else if (frown) {
+              performAction("😠 FIRM RESOLVE (FROWN)", "Transforming agitation into focused strength.");
+            } else {
+              lastGesture = "";
+              gestureElem.textContent = "Present & Aware 🪷";
+              actionElem.textContent = "Smile, frown, or yawn softly to reflect.";
+            }
+          }
+        } else {
+          isFaceCurrentlyDetected = false;
+          lastGesture = "";
+          gestureElem.textContent = "Scanning for biometric signature...";
+          actionElem.textContent = "Center your face in front of the camera";
+        }
+      }
+
+      requestAnimationFrame(detectLoop);
+    }
+
+    document.getElementById("start").onclick = async () => {
+      try {
+        audioEngine.init();
+        document.getElementById("start").style.display = "none";
+        await setup();
+      } catch (error) {
+        gestureElem.textContent = "Error awakening";
+        actionElem.textContent = error.message;
+        console.error(error);
+      }
+    };
+  </script>
+
+</body>
+</html>
